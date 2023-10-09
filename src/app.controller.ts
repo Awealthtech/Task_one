@@ -14,4 +14,8 @@ export class AppController {
   getPrint(): string {
     return this.appService.getPrint();
   }
+  @Get('/cons')
+  testing(): string {
+    return this.appService.testConsole();
+  }
 }

@@ -8,4 +8,8 @@ export class AppService {
   getPrint(): string {
     return "i'm learning nestjs";
   }
+  testConsole(): string {
+    console.log('learning nest on console');
+    return 'nestjs is interesting';
+  }
 }
