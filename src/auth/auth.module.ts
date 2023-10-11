@@ -1,11 +1,22 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserSchema } from './schema/user.schema';
+import { secretKey } from './config';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/nest')],
+  imports: [
+    MongooseModule.forFeature([{ name: 'user', schema: UserSchema }]),
+    JwtModule.register({
+      secret: secretKey.secret,
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure() {}
+}

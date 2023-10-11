@@ -10,8 +10,8 @@ export class AuthController {
   }
 
   @Post('/signup')
-  SignupPost() {
-    return this.authService.userSignupPost();
+  async SignupPost() {
+    return this.authService.userSignupPost;
   }
 
   @Get('/login')
