@@ -30,7 +30,7 @@ export class AuthService {
   UserLoginGet() {
     return 'signup request provider successfully created';
   }
-  async findAll(): Promise<user[]> {
-    return this.userModel.find().exec();
+  async findByUsername(name: string) {
+    return this.userModel.find({ name }).exec();
   }
 }

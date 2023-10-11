@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from './Dto/User.Dto';
-import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
+  import: [UserDto];
   constructor(private authService: AuthService) {}
   @Get('/signup')
   SignupGet() {
@@ -13,10 +13,7 @@ export class AuthController {
 
   @Post('/signup')
   async SignupPost(@Body() UserDto: UserDto) {
-    const User = await this.authService.userSignupPost(UserDto);
-    const payload = { name: User.name, sub: User._id };
-    const token = this.jwtservice.sign(payload);
-    return { access_token: token };
+    return this.authService.userSignupPost(UserDto);
   }
 
   @Get('/login')
