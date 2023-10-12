@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from './Dto/User.Dto';
+import { ValidationPipe } from '@nestjs/common/pipes';
+import { UsePipes } from '@nestjs/common/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +14,7 @@ export class AuthController {
   }
 
   @Post('/signup')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async SignupPost(@Body() UserDto: UserDto) {
     return this.authService.userSignupPost(UserDto);
   }
