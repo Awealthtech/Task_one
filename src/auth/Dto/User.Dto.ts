@@ -10,4 +10,7 @@ export class UserDto {
 
   @MinLength(8)
   password: string;
+
+  @IsNotEmpty({ message: 'email is required' })
+  phoneNumber: string;
 }
