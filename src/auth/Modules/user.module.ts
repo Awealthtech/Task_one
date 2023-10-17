@@ -1,14 +1,14 @@
 import { Module, NestModule } from '@nestjs/common';
-import { AuthController } from '../Controllers/auth.controller';
-import { AuthService } from '../Services/auth.service';
+import { AuthController } from '../Controllers/user.controller';
+import { AuthService } from '../Services/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { user, UserSchema } from '../schema/user.schema';
+import { User, UserSchema } from '../Model/user.model';
 import { secretKey } from '../config';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: user.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
       secret: secretKey.secret,
       signOptions: { expiresIn: '1h' },

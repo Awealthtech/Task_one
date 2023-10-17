@@ -1,9 +1,9 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 
-export const CreateUserDto = Joi.object({
+export const CreateUserValidator = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  isVerified: Joi.boolean().required(),
+  password: Joi.string().required(),
   phoneNumber: Joi.number(),
 }).options({
   abortEarly: false,

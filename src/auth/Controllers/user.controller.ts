@@ -1,12 +1,11 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { AuthService } from '../Services/auth.service';
-import { UserDto } from '../Dto/User.Dto';
-import { ValidationPipe } from '@nestjs/common/pipes';
-import { UsePipes } from '@nestjs/common/decorators';
+import { AuthService } from '../Services/user.service';
+import { CreateUserValidator } from '../validation/user.validator';
+import { CreateUserDto } from '../Dto/User.Dto';
+import { JoiValidationPipe } from '../validation/validation.middleware';
 
 @Controller('auth')
 export class AuthController {
-  import: [UserDto];
   constructor(private authService: AuthService) {}
   @Get('/signup')
   SignupGet() {
@@ -14,9 +13,11 @@ export class AuthController {
   }
 
   @Post('/signup')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async SignupPost(@Body() UserDto: UserDto) {
-    return this.authService.userSignupPost(UserDto);
+  async SignupPost(
+    @Body(new JoiValidationPipe(CreateUserValidator))
+    user: CreateUserDto,
+  ) {
+    return this.authService.userSignupPost(user);
   }
 
   @Get('/login')

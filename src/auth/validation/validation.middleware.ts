@@ -1,14 +1,15 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
-import { CreateTodoDto } from '../Dto/CreateTodo.Dto';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { ObjectSchema } from 'joi';
 
 @Injectable()
-export class ValidationMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const { error } = CreateTodoDto.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+export class JoiValidationPipe implements PipeTransform {
+  constructor(private schema: ObjectSchema) {}
+  transform(value: any) {
+    try {
+      this.schema.validate(value);
+      return value;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    next();
   }
 }

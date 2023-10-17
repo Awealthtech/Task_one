@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { user } from '../schema/user.schema';
+import { User } from '../Model/user.model';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto } from '../Dto/User.Dto';
-import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from '../Dto/User.Dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(user.name) private userModel: Model<user>,
+    @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
   ) {}
 
@@ -19,15 +19,16 @@ export class AuthService {
   }
 
   // user signup post
-  async userSignupPost(userDto: UserDto): Promise<user> {
+  async userSignupPost(userDto: CreateUserDto): Promise<User> {
     const createUser = await this.userModel.create(userDto);
+
     // const result = await this.hashPassword(createUser.password);
     // createUser.password = result;
     console.log('user saved');
-    return createUser.save();
+    return await createUser.save();
   }
 
-  async findById(id: string): Promise<user> {
+  async findById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }
   async hashPassword(password: string): Promise<string> {
