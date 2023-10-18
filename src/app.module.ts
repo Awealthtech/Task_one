@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/Modules/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { todoModule } from './auth/Modules/todo.module';
+import { todoModule } from './auth/Modules/todo.module';
 // import { ValidationMiddleware } from './auth/validation/validation.middleware';
 
 @Module({
   imports: [
-    // todoModule,
+    todoModule,
     AuthModule,
     ConfigModule.forRoot({
       envFilePath: '.env',

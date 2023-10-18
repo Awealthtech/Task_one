@@ -20,10 +20,9 @@ export class AuthService {
 
   // user signup post
   async userSignupPost(userDto: CreateUserDto): Promise<User> {
-    const createUser = await this.userModel.create(userDto);
-
-    // const result = await this.hashPassword(createUser.password);
-    // createUser.password = result;
+    const createUser = new this.userModel(userDto);
+    const result = await this.hashPassword(createUser.password);
+    createUser.password = result;
     console.log('user saved');
     return await createUser.save();
   }
