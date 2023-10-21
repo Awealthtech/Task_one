@@ -9,12 +9,14 @@ import {
   Put,
   Param,
   Delete,
+  // Query,
 } from '@nestjs/common';
 import { TodoService } from '../services/todo.service';
 import { CreateTodoDto } from '../Dto/todo.Dto';
 // import { JoiValidationPipe } from '../validation/validation.middleware';
 // import { CreateTodoValidator } from '../validation/todo.validation';
 import { todo } from '../todos.mock';
+// import { number } from 'joi';
 
 @Controller('todo')
 export class TodoController {
@@ -24,6 +26,14 @@ export class TodoController {
   getTodo(): CreateTodoDto[] {
     return todo;
   }
+
+  // @Get(/page)
+  // async getTodosPage(
+  //   @Query('page') page: number = 1,
+  //   @Query('limit') limit: number = 10,
+  // ): Promise<Todo[]> {
+  //   return this.TodoService.findAll(page, limit);
+  // }
 
   @Post()
   @UsePipes(ValidationPipe)
@@ -54,11 +64,3 @@ export class TodoController {
     return todoToDelete;
   }
 }
-// async create(@Body() todo: CreateTodoDto): Promise<Todo> {
-//   return this.todoService.create(todo);
-// }
-//   @Body(new JoiValidationPipe(CreateTodoValidator))
-//   todo: CreateTodoDto,
-// ) {
-//     return this.todoService.create(todo);
-//   }

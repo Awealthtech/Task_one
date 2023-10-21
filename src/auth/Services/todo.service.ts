@@ -12,4 +12,8 @@ export class TodoService {
     const createdTodo = new this.todoModel(createTodoDto);
     return createdTodo.save();
   }
+  async findAll(page: number, limit: number): Promise<Todo[]> {
+    const skip = (page - 1) * limit;
+    return this.todoModel.find().skip(skip).limit(limit).exec();
+  }
 }

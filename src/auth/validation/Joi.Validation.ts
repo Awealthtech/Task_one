@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { ObjectSchema } from 'joi';
+import * as Joi from 'joi';
 
 @Injectable()
 export class JoiValidationPipe implements PipeTransform {
-  constructor(private schema: ObjectSchema) {}
+  constructor(private schema: Joi.ObjectSchema) {}
   transform(value: any) {
-    try {
-      this.schema.validate(value);
-      return value;
-    } catch (error) {
+    console.log(value);
+    const { error } = this.schema.validate(value);
+    if (error) {
       throw new BadRequestException(error.message);
     }
+    return value;
   }
 }

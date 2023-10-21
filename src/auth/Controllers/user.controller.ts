@@ -7,7 +7,6 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthService } from '../Services/user.service';
-// import { CreateUserValidator } from '../validation/user.validator';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CreateUserDto, UserLoginDto } from '../Dto/User.Dto';
 import { JoiValidationPipe } from '../validation/Joi.Validation';
@@ -18,18 +17,19 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  @UsePipes(new JoiValidationPipe(CreateUserValidator))
+  // @UsePipes(new JoiValidationPipe(CreateUserValidator))
   async CreateUser(
-    @Body() CreateUserDto: CreateUserDto,
-  ): Promise<{ token: string }> {
-    return this.authService.createUser(CreateUserDto);
+    @Body(new JoiValidationPipe(CreateUserValidator))
+    CreateUserDto: CreateUserDto,
+  ) {
+    // const { error } = CreateUserValidator.validate(CreateUserDto);
+    // if (error) {
+    //   return { error: error.details };
+    // }
+    const user = this.authService.createUser(CreateUserDto);
+    console.log(CreateUserDto);
+    return { user };
   }
-  // @Body(new JoiValidationPipe(CreateUserValidator))
-  // user: CreateUserDto,
-  // ) {
-  //   const newUser = this.authService.createUser(user);
-  //   return newUser;
-  // }
 
   @Get('/login')
   login() {
