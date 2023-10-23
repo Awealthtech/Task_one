@@ -5,3 +5,9 @@ export const CreateTodoValidator = Joi.object({
   description: Joi.string(),
   completed: Joi.boolean(),
 });
+
+export const UpdateTodoValidator = Joi.object({
+  title: Joi.string().trim().allow(null),
+  description: Joi.string().allow(null),
+  completed: Joi.boolean().allow(null),
+});

@@ -7,7 +7,7 @@ import { CreateUserDto, UserLoginDto } from '../Dto/User.Dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,

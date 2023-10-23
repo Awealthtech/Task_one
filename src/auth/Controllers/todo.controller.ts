@@ -7,58 +7,63 @@ import {
   Put,
   Param,
   Delete,
+  Query,
   // Query,
 } from '@nestjs/common';
 import { TodoService } from '../services/todo.service';
-import { CreateTodoDto } from '../Dto/todo.Dto';
-import { todo } from '../todos.mock';
-import { JoiValidationPipe } from '../validation/Joi.Validation';
-import { CreateTodoValidator } from '../validation/todo.validation';
+import { CreateTodoDto, updateTodoDto } from '../Dto/todo.Dto';
+import { ObjectValidationPipe } from '../Pipe/validation.pipe';
+import {
+  CreateTodoValidator,
+  UpdateTodoValidator,
+} from '../validation/todo.validation';
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Get()
-  getTodo(): CreateTodoDto[] {
-    return todo;
+  @Get('View-Todo/:id')
+  async getAllTodoList(@Param('id') id: string) {
+    const todoList = await this.todoService.FindAllTodo(id);
+    return todoList;
   }
 
-  // @Get(/page)
-  // async getTodosPage(
-  //   @Query('page') page: number = 1,
-  //   @Query('limit') limit: number = 10,
-  // ): Promise<Todo[]> {
-  //   return this.TodoService.findAll(page, limit);
-  // }
+  @Get('view-all-todo-list')
+  async findAllTodoList() {
+    const viewAll = await this.todoService.getAllTodoList();
+    return viewAll;
+  }
 
-  @Post()
+  @Post('Create-new-Todo')
   createTodo(
-    @Body(new JoiValidationPipe(CreateTodoValidator)) createTodo: CreateTodoDto,
-  ): CreateTodoDto {
-    const newTodo: CreateTodoDto = {
-      id: (todo.length + 1).toString(),
-      ...createTodo,
-    };
-
-    // todo = [...todo, newTodo];
-
+    @Body(new ObjectValidationPipe(CreateTodoValidator))
+    createTodo: CreateTodoDto,
+  ) {
+    const newTodo = this.todoService.create(createTodo);
     return newTodo;
   }
 
-  @Put(':id')
-  updateTodo(
-    @Body() updateTodo: CreateTodoDto,
-    @Param('id') id,
-  ): CreateTodoDto {
-    todo.map((todo) => (todo.id === id ? updateTodo : todo));
-    return updateTodo;
+  @Put('Update-todo/:id')
+  async updateTodo(
+    @Body(new ObjectValidationPipe(UpdateTodoValidator))
+    updateTodo: updateTodoDto,
+    @Param('id') id: string,
+  ) {
+    const updateTodoList = await this.todoService.updateTodoList(id);
+    return updateTodoList;
   }
 
-  @Delete(':id')
-  deleteTodo(@Param('id') id): CreateTodoDto {
-    const todoToDelete = todo.find((todo) => todo.id === id);
-    todo.filter((todo) => todo.id !== id);
-    return todoToDelete;
+  @Delete('delete-todo/:id')
+  deleteTodo(@Param('id') id: string) {
+    const deleteTodo = this.todoService.deleteTodoList(id);
+    return deleteTodo;
+  }
+
+  @Get()
+  async getTodoLIst(
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    return this.todoService.getAllTodo(page, pageSize);
   }
 }
