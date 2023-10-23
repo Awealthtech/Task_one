@@ -1,4 +1,4 @@
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export type UserDocument = Document<User>;
@@ -8,7 +8,7 @@ export class User {
   name: string;
   // @Prop()
   password: string;
-  // @Prop({ unique: [true, 'Duplicate email'] })
+  @Prop({ unique: [true, 'Duplicate email'] })
   email: string;
 
   // @Prop()

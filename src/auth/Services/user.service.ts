@@ -17,7 +17,6 @@ export class AuthService {
   async createUser(CreateUserDto: CreateUserDto): Promise<{ token: string }> {
     const { name, email, password, phoneNumber } = CreateUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await this.userModel.create({
       name,
       email,

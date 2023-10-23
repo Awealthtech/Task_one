@@ -4,8 +4,6 @@ import {
   Post,
   Body,
   Get,
-  ValidationPipe,
-  UsePipes,
   Put,
   Param,
   Delete,
@@ -13,10 +11,9 @@ import {
 } from '@nestjs/common';
 import { TodoService } from '../services/todo.service';
 import { CreateTodoDto } from '../Dto/todo.Dto';
-// import { JoiValidationPipe } from '../validation/validation.middleware';
-// import { CreateTodoValidator } from '../validation/todo.validation';
 import { todo } from '../todos.mock';
-// import { number } from 'joi';
+import { JoiValidationPipe } from '../validation/Joi.Validation';
+import { CreateTodoValidator } from '../validation/todo.validation';
 
 @Controller('todo')
 export class TodoController {
@@ -36,8 +33,9 @@ export class TodoController {
   // }
 
   @Post()
-  @UsePipes(ValidationPipe)
-  createTodo(@Body() createTodo: CreateTodoDto): CreateTodoDto {
+  createTodo(
+    @Body(new JoiValidationPipe(CreateTodoValidator)) createTodo: CreateTodoDto,
+  ): CreateTodoDto {
     const newTodo: CreateTodoDto = {
       id: (todo.length + 1).toString(),
       ...createTodo,
