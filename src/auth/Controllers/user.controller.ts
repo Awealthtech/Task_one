@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
 import { UserService } from '../Services/user.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CreateUserDto, UserLoginDto } from '../Dto/User.Dto';
@@ -19,7 +19,6 @@ export class UserController {
     CreateUserDto: CreateUserDto,
   ) {
     const user = this.userService.createUser(CreateUserDto);
-    console.log(CreateUserDto);
     return user;
   }
 
@@ -36,9 +35,15 @@ export class UserController {
   }
 
   @Get('find-user-by-email')
-  async findUserByMail(email: string): Promise<User> {
-    const findUser = await this.userService.FindByEmail(email);
+  async getUserByMail(email: string): Promise<User> {
+    const findUser = await this.userService.FindUserByEmail(email);
     return findUser;
+  }
+
+  @Get('find-user-by-id/:id')
+  async getUserById(@Param('id') id: string): Promise<User> {
+    const getUserById = await this.userService.findUserById(id);
+    return getUserById;
   }
 
   @Get('get-users-list-page')

@@ -14,24 +14,27 @@ export class UserService {
   ) {}
 
   // User signup Post
-  async createUser(CreateUserDto: CreateUserDto): Promise<{ token: string }> {
+  async createUser(CreateUserDto: CreateUserDto): Promise<User> {
     const { name, email, password, phoneNumber } = CreateUserDto;
+    const user = await this.userModel.findOne({ email });
+    if (user) {
+      throw new UnauthorizedException('User with email already exist');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.userModel.create({
+    const newUser = await this.userModel.create({
       name,
       email,
       password: hashedPassword,
       phoneNumber,
     });
-    const token = this.jwtService.sign({ id: user._id });
-    return { token };
+    return newUser;
   }
 
-  async FindByEmail(email: string): Promise<User> {
+  async FindUserByEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
   }
 
-  async findById(id: string): Promise<User> {
+  async findUserById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }
 
