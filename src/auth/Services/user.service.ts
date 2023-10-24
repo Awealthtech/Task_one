@@ -53,7 +53,8 @@ export class UserService {
     return 'login successfully';
   }
 
-  async findByUsername(name: string) {
-    return this.userModel.find({ name }).exec();
+  async getAllUsers(page: number, pageSize: number) {
+    const skip = (page - 1) * pageSize;
+    return this.userModel.find().skip(skip).limit(pageSize).exec();
   }
 }

@@ -59,7 +59,7 @@ export class TodoController {
     return deleteTodo;
   }
 
-  @Get()
+  @Get('get-todo-list-page')
   async getTodoLIst(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,

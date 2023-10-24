@@ -14,11 +14,6 @@ export class TodoService {
     return createdTodo.save();
   }
 
-  // async findAll(page: number, limit: number): Promise<Todo[]> {
-  //   const skip = (page - 1) * limit;
-  //   return this.todoModel.find().skip(skip).limit(limit).exec();
-  // }
-
   async FindAllTodo(id: string) {
     const findTodo = await this.todoModel.findById(id);
     return findTodo;
