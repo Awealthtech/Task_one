@@ -17,6 +17,6 @@ import { secretKey } from '../config';
   controllers: [UserController],
   providers: [UserService],
 })
-export class AuthModule implements NestModule {
+export class userModule implements NestModule {
   configure() {}
 }

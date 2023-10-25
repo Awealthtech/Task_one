@@ -20,6 +20,10 @@ export class UserService {
     if (user) {
       throw new UnauthorizedException('User with email already exist');
     }
+    const userNumber = await this.userModel.findOne({ phoneNumber });
+    if (userNumber) {
+      throw new UnauthorizedException('User with phone number already exist');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userModel.create({
       name,

@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/Modules/user.module';
+import { userModule } from './auth/Modules/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { todoModule } from './auth/Modules/todo.module';
-// import { ValidationMiddleware } from './auth/validation/validation.middleware';
 
 @Module({
   imports: [
     todoModule,
-    AuthModule,
+    userModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
@@ -16,10 +15,4 @@ import { todoModule } from './auth/Modules/todo.module';
     MongooseModule.forRoot(process.env.MONGO_URI),
   ],
 })
-export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(ValidationMiddleware)
-  //     .forRoutes({ path: 'todo', method: RequestMethod.POST });
-  // }
-}
+export class AppModule {}
