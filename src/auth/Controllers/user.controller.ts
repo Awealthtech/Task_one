@@ -31,6 +31,9 @@ export class UserController {
   loginUser(
     @Body(new JoiValidationPipe(LoginUserValidator)) LoginDto: UserLoginDto,
   ): Promise<{ token: string }> {
+    //once you have return the user form the db
+    //generate your token
+  const accessToken = await this.userService.generateUserToken()
     return this.userService.Login(LoginDto);
   }
 

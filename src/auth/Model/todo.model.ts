@@ -1,5 +1,8 @@
 import * as mongoose from 'mongoose';
 
+//NOT: refactor this
+//Track who is creating a todo on the TODO model
+//Implement get all todo by the user ID
 export const TodoSchema = new mongoose.Schema({
   title: String,
   description: String,

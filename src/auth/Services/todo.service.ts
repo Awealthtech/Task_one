@@ -13,7 +13,7 @@ export class TodoService {
     return createdTodo.save();
   }
 
-  async FindAllTodo(id: string) {
+  async FindTodoById(id: string) {
     const findTodo = await this.todoModel.findById(id);
     return findTodo;
   }
@@ -29,7 +29,7 @@ export class TodoService {
   }
 
   async getAllTodoList() {
-    const getAllTodo = await this.todoModel.find();
+    const getAllTodo = await this.todoModel.find({});
     return getAllTodo;
   }
 

@@ -11,11 +11,13 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
+    priavate readonly tokenService: TokenService,
   ) {}
 
   // User signup Post
   async createUser(CreateUserDto: CreateUserDto): Promise<User> {
     const { name, email, password, phoneNumber } = CreateUserDto;
+     //do a this check in the guard
     const user = await this.userModel.findOne({ email });
     if (user) {
       throw new UnauthorizedException('User with email already exist');
