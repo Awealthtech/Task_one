@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { userModule } from './auth/Modules/user.module';
+import { userModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { todoModule } from './auth/Modules/todo.module';
+import { todoModule } from './todo/todo.module';
 
 @Module({
   imports: [

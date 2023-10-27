@@ -10,9 +10,9 @@ import {
   Query,
   // Query,
 } from '@nestjs/common';
-import { TodoService } from '../services/todo.service';
+import { TodoService } from '../service/todo.service';
 import { CreateTodoDto, updateTodoDto } from '../Dto/todo.Dto';
-import { ObjectValidationPipe } from '../Pipe/validation.pipe';
+import { ObjectValidationPipe } from '../../utils/Pipe/validation.pipe';
 import {
   CreateTodoValidator,
   UpdateTodoValidator,
@@ -22,11 +22,11 @@ import {
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Get('View-Todo/:id')
-  async getAllTodoList(@Param('id') id: string) {
-    const todoList = await this.todoService.FindAllTodo(id);
-    return todoList;
-  }
+  // @Get('View-Todo/:id')
+  // async getAllTodoList(@Param('id') id: string) {
+  //   const todoList = await this.todoService.FindAllTodo(id);
+  //   return todoList;
+  // }
 
   @Get('view-all-todo-list')
   async findAllTodoList() {

@@ -1,19 +1,30 @@
-import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
-import { UserService } from '../Services/user.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { UserService } from '../service/user.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CreateUserDto, UserLoginDto } from '../Dto/User.Dto';
-import { JoiValidationPipe } from '../validation/Joi.Validation';
+import { CreateUserDto, UserLoginDto } from '../dto/User.Dto';
+import { JoiValidationPipe } from '../../utils/Pipe/Joi.Validation';
 import {
   CreateUserValidator,
   LoginUserValidator,
-} from '../validation/user.validator';
-import { User } from '../Model/user.model';
+  // LoginUserValidator,
+} from '../validations/user.validator';
+import { User } from '../model/user.model';
+import { CreateUserGuard } from '../guard/guard';
 
-@Controller('auth')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('/signup')
+  @UseGuards(CreateUserGuard)
   async CreateUser(
     @Body(new JoiValidationPipe(CreateUserValidator))
     CreateUserDto: CreateUserDto,
@@ -28,13 +39,11 @@ export class UserController {
   }
 
   @Post('login')
-  loginUser(
+  async loginUser(
     @Body(new JoiValidationPipe(LoginUserValidator)) LoginDto: UserLoginDto,
   ): Promise<{ token: string }> {
-    //once you have return the user form the db
-    //generate your token
-  const accessToken = await this.userService.generateUserToken()
-    return this.userService.Login(LoginDto);
+    const accessToken = await this.userService.Login(LoginDto);
+    return accessToken;
   }
 
   @Get('find-user-by-email')

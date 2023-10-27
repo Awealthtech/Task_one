@@ -1,10 +1,11 @@
 import { Module, NestModule } from '@nestjs/common';
-import { UserController } from '../Controllers/user.controller';
-import { UserService } from '../Services/user.service';
+import { UserController } from './controller/user.controller';
+import { UserService } from './service/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../Model/user.model';
-import { secretKey } from '../config';
+import { User, UserSchema } from './model/user.model';
+import { secretKey } from '../config/config';
+import { TokenService } from 'src/utils/token/services/token.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { secretKey } from '../config';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, TokenService],
 })
 export class userModule implements NestModule {
   configure() {}
