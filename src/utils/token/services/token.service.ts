@@ -18,5 +18,7 @@ export class TokenService {
     return token;
   }
   //method to verify token
-  async verifyToken() {}
+  async verifyToken() {
+    const verify = await this.JwtService.verify()
+  }
 }

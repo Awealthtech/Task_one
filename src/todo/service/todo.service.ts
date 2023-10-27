@@ -6,9 +6,6 @@ import { CreateTodoDto } from '../dto/todo.Dto';
 
 @Injectable()
 export class TodoService {
-  // FindAllTodo(id: string) {
-  //   throw new Error('Method not implemented.');
-  // }
   constructor(@InjectModel('Todo') private readonly todoModel: Model<Todo>) {}
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
@@ -16,8 +13,8 @@ export class TodoService {
     return createdTodo.save();
   }
 
-  async FindTodoById(id: string) {
-    const findTodo = await this.todoModel.findById(id);
+  async FindTodoByUser(userid: string) {
+    const findTodo = await this.todoModel.findById(userid);
     return findTodo;
   }
 
