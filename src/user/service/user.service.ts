@@ -12,7 +12,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, UserLoginDto } from '../dto/User.Dto';
 import * as bcrypt from 'bcryptjs';
 // import { TokenService } from 'src/utils/token/services/token.service';
-import { CreateUserGuard } from '../guard/guard';
 import { TokenService } from 'src/utils/token/services/token.service';
 
 @Injectable()
@@ -22,7 +21,6 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
     private readonly tokenService: TokenService,
-    private readonly createUserGuard: CreateUserGuard,
   ) {}
 
   // User signup Post
@@ -46,7 +44,9 @@ export class UserService {
   async FindUserByEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
   }
-
+  async FindUserByPhone(phoneNumber: string): Promise<User> {
+    return this.userModel.findOne({ phoneNumber });
+  }
   async findUserById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }
