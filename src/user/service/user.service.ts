@@ -11,7 +11,6 @@ import { User } from '../model/user.model';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, UserLoginDto } from '../dto/User.Dto';
 import * as bcrypt from 'bcryptjs';
-// import { TokenService } from 'src/utils/token/services/token.service';
 import { TokenService } from 'src/utils/token/services/token.service';
 
 @Injectable()
@@ -20,13 +19,12 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
-    private readonly tokenService: TokenService,
+    private tokenService: TokenService,
   ) {}
 
   // User signup Post
   async createUser(CreateUserDto: CreateUserDto): Promise<User> {
     const { name, email, password, phoneNumber } = CreateUserDto;
-    //do a this check in the guard
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await this.userModel.create({
@@ -93,3 +91,24 @@ export class UserService {
     }
   }
 }
+
+// async Login(loginDto: UserLoginDto): Promise<string> {
+//   const { email, password } = loginDto;
+//   try {
+//     const user = await this.userModel.findOne({ email });
+//     if (!user) {
+//       throw new UnauthorizedException('invalid email');
+//     }
+//     const isPasswordMatch = await bcrypt.compare(password, user.password);
+//     if (!isPasswordMatch) {
+//       throw new UnauthorizedException('invalid email or password');
+//     }
+//     // const token = this.jwtService.sign
+//     const payload = { id: user._id };
+//     const token = this.jwtService.sign(payload);
+//     return token;
+//   } catch (error) {
+//     console.log(error);
+//     throw new UnauthorizedException('An error occurred while logging in');
+//   }
+// }

@@ -41,7 +41,7 @@ export class UserController {
   @Post('login')
   async loginUser(
     @Body(new JoiValidationPipe(LoginUserValidator)) LoginDto: UserLoginDto,
-  ): Promise<{ token: string }> {
+  ) {
     const accessToken = await this.userService.Login(LoginDto);
     return accessToken;
   }

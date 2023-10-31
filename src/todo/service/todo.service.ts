@@ -8,13 +8,13 @@ import { CreateTodoDto } from '../dto/todo.Dto';
 export class TodoService {
   constructor(@InjectModel('Todo') private readonly todoModel: Model<Todo>) {}
 
-  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
-    const createdTodo = new this.todoModel(createTodoDto);
+  async create(createTodoDto: CreateTodoDto, UserID: string): Promise<Todo> {
+    const createdTodo = new this.todoModel({ ...createTodoDto, UserID });
     return createdTodo.save();
   }
 
-  async FindTodoByUser(userid: string) {
-    const findTodo = await this.todoModel.findById(userid);
+  async FindTodoByUser(id: string) {
+    const findTodo = await this.todoModel.findById(id);
     return findTodo;
   }
 
@@ -26,11 +26,6 @@ export class TodoService {
   async deleteTodoList(id: string) {
     const DeleteTodo = await this.todoModel.findByIdAndDelete(id);
     return DeleteTodo;
-  }
-
-  async getAllTodoList() {
-    const getAllTodo = await this.todoModel.find({});
-    return getAllTodo;
   }
 
   async getAllTodo(page: number, pageSize: number) {

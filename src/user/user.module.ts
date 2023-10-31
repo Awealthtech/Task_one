@@ -1,4 +1,4 @@
-import { Module, NestModule } from '@nestjs/common';
+import { Global, Module, NestModule } from '@nestjs/common';
 import { UserController } from './controller/user.controller';
 import { UserService } from './service/user.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -7,6 +7,7 @@ import { User, UserSchema } from './model/user.model';
 import { secretKey } from '../config/config';
 import { TokenService } from 'src/utils/token/services/token.service';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),

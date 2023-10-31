@@ -6,8 +6,10 @@ import {
   Get,
   Put,
   Param,
+  Request,
   Delete,
   Query,
+  UseGuards,
   // Query,
 } from '@nestjs/common';
 import { TodoService } from '../service/todo.service';
@@ -17,30 +19,29 @@ import {
   CreateTodoValidator,
   UpdateTodoValidator,
 } from '../validation/todo.validation';
+import { TodoGuards } from '../guard/todo.guard';
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  // @Get('View-Todo/:id')
-  // async getAllTodoList(@Param('id') id: string) {
-  //   const todoList = await this.todoService.FindAllTodo(id);
-  //   return todoList;
-  // }
-
-  @Get('view-all-todo-list')
-  async findAllTodoList() {
-    const viewAll = await this.todoService.getAllTodoList();
-    return viewAll;
-  }
-
   @Post('Create-new-Todo')
+  @UseGuards(TodoGuards)
   createTodo(
     @Body(new ObjectValidationPipe(CreateTodoValidator))
     createTodo: CreateTodoDto,
+    @Request()
+    request,
   ) {
-    const newTodo = this.todoService.create(createTodo);
+    const UserID = request.user.id;
+    const newTodo = this.todoService.create(createTodo, UserID);
     return newTodo;
+  }
+
+  @Get('View-Todo/:id')
+  async getAllTodoList(@Param('id') id: string) {
+    const todoList = await this.todoService.FindTodoByUser(id);
+    return todoList;
   }
 
   @Put('Update-todo/:id')

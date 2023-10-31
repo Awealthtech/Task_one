@@ -1,11 +1,11 @@
 export class CreateTodoDto {
-  id?: string;
+  id: string;
   title: string;
   description: string;
   status: 'todo' | 'done' | 'in progress';
 }
 export class updateTodoDto {
-  id?: string;
+  id: string;
   title: string;
   description: string;
   status: 'todo' | 'done' | 'in progress';

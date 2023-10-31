@@ -1,12 +1,13 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
-export class Todo {
+@Schema({ timestamps: true })
+export class Todo extends mongoose.Document {
   @Prop()
   title: string;
 
   @Prop({ types: mongoose.Schema.Types.ObjectId, ref: 'users' })
-  User: string;
+  userID: string;
 
   @Prop()
   description: string;
