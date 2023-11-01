@@ -8,13 +8,14 @@ import {
 
 @Injectable()
 export class TokenService {
-  JwtService: any;
+  // JwtService: any;
   extractTokenFromHeader: any;
   constructor(private jwtService: JwtService) {}
   // method to sign your jwt
   async generateToken(payload: { id: any }) {
-    const token = await this.JwtService.sign(payload, secretKey, {
+    const token = this.jwtService.sign(payload, {
       expiresIn: '1h',
+      ...secretKey,
     });
     return token;
   }

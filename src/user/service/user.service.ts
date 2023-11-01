@@ -49,7 +49,7 @@ export class UserService {
     return this.userModel.findById(id).exec();
   }
 
-  async Login(loginDto: UserLoginDto): Promise<{ token: string }> {
+  async Login(loginDto: UserLoginDto) {
     const { email, password } = loginDto;
     try {
       const user = await this.userModel.findOne({ email });
@@ -63,7 +63,7 @@ export class UserService {
       // const token = this.jwtService.sign
       const payload = { id: user._id };
       const token = this.tokenService.generateToken(payload);
-      return token;
+      return { token };
     } catch (error) {
       console.log(error);
       throw new UnauthorizedException('An error occurred while logging in');
