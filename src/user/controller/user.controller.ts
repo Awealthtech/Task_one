@@ -18,6 +18,7 @@ import {
 } from '../validations/user.validator';
 import { User } from '../model/user.model';
 import { CreateUserGuard } from '../guard/guard';
+// import { TodoGuards } from 'src/todo/guard/todo.guard';
 
 @Controller('users')
 export class UserController {
@@ -39,6 +40,7 @@ export class UserController {
   }
 
   @Post('login')
+  // @UseGuards(TodoGuards)
   async loginUser(
     @Body(new JoiValidationPipe(LoginUserValidator)) LoginDto: UserLoginDto,
   ) {

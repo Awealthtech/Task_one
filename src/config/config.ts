@@ -1,3 +1,3 @@
 export const secretKey = {
-  secret: process.env.SECRET_KEY,
+  secret: 'UTR6vgfybuy889jjuiycrs3rfvkjoj9oj9',
 };

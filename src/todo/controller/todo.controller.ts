@@ -20,6 +20,7 @@ import {
   UpdateTodoValidator,
 } from '../validation/todo.validation';
 import { TodoGuards } from '../guard/todo.guard';
+import { TokenDto } from 'src/utils/token/token.dto';
 
 @Controller('todo')
 export class TodoController {
@@ -33,14 +34,15 @@ export class TodoController {
     @Request()
     request,
   ) {
-    const UserID = request.user.id;
-    const newTodo = this.todoService.create(createTodo, UserID);
+    const user: TokenDto = request['user'];
+    const newTodo = this.todoService.create(createTodo, user.userId);
     return newTodo;
   }
 
   @Get('View-Todo/:id')
-  async getAllTodoList(@Param('id') id: string) {
-    const todoList = await this.todoService.FindTodoByUser(id);
+  async getAllTodoList(@Param('id') id: string, @Request() request) {
+    const { userId } = request['user'];
+    const todoList = await this.todoService.findTodoById(id, userId);
     return todoList;
   }
 

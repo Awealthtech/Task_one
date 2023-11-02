@@ -15,3 +15,9 @@ export class SearchTodoDto {
   id: string[];
   title: string[];
 }
+
+// export class TokenDto {
+//   userId: string;
+//   name: string;
+//   isVerified: boolean;
+// }

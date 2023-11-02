@@ -1,46 +1,39 @@
 import { JwtService } from '@nestjs/jwt';
-import { secretKey } from 'src/config/config';
+
 import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { TokenDto } from '../token.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TokenService {
-  // JwtService: any;
-  extractTokenFromHeader: any;
-  constructor(private jwtService: JwtService) {}
-  // method to sign your jwt
-  async generateToken(payload: { id: any }) {
-    const token = this.jwtService.sign(payload, {
-      expiresIn: '1h',
-      ...secretKey,
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
+
+  async generateToken(tokenDto: TokenDto): Promise<string> {
+    const token = this.jwtService.signAsync(tokenDto, {
+      secret: this.configService.getOrThrow('SECRET_KEY'),
+      expiresIn: this.configService.getOrThrow('TimeToLive'),
     });
     return token;
   }
 
-  async verifyToken(token: string): Promise<boolean> {
+  async verifyToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: secretKey.secret,
+        secret: this.configService.get('SECRET_KEY'),
       });
-      Request['user'] = payload;
+      return payload;
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         throw new UnauthorizedException('Jwt Expired');
       }
       throw new BadRequestException('Invalid Token');
     }
-    return true;
   }
-
-  // private extractTokenFromHeader(request: Request): string | undefined {
-  //   const [type, token] = request.headers.authorization?.split(' ') ?? [];
-  //   if (!token) return;
-  //   if (type != 'Bearer') {
-  //     throw new BadRequestException('Please provide a Bearer token ');
-  //   }
-  //   return token;
-  // return type === 'Bearer' ? token : undefined;
 }

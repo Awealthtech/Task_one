@@ -8,18 +8,32 @@ import { CreateTodoDto } from '../dto/todo.Dto';
 export class TodoService {
   constructor(@InjectModel('Todo') private readonly todoModel: Model<Todo>) {}
 
-  async create(createTodoDto: CreateTodoDto, UserID: string): Promise<Todo> {
-    const createdTodo = new this.todoModel({ ...createTodoDto, UserID });
-    return createdTodo.save();
+  async create(createTodoDto: CreateTodoDto, userId: string): Promise<Todo> {
+    const createdTodo = new this.todoModel({ ...createTodoDto, user: userId });
+    return await createdTodo.save();
   }
 
-  async FindTodoByUser(id: string) {
-    const findTodo = await this.todoModel.findById(id);
+  async FindTodoByUser(userId: string) {
+    const findTodo = await this.todoModel
+      .findById({ user: userId })
+      .select('-user');
     return findTodo;
   }
 
+  async findTodoById(todoId: string, userId: string) {
+    const foundTodo = await this.todoModel.findOne({
+      user: userId,
+      _id: todoId,
+    }); //.populate('user')
+    return foundTodo;
+  }
+
   async updateTodoList(id: string) {
-    const UpdateTodo = await this.todoModel.findByIdAndUpdate(id);
+    const UpdateTodo = await this.todoModel.findByIdAndUpdate(
+      id,
+      { ...Todo },
+      { new: true },
+    );
     return UpdateTodo;
   }
 

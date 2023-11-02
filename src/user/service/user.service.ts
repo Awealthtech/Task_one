@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, UserLoginDto } from '../dto/User.Dto';
 import * as bcrypt from 'bcryptjs';
 import { TokenService } from 'src/utils/token/services/token.service';
+import { TokenDto } from 'src/utils/token/token.dto';
 
 @Injectable()
 export class UserService {
@@ -39,16 +40,6 @@ export class UserService {
     }
   }
 
-  async FindUserByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email });
-  }
-  async FindUserByPhone(phoneNumber: string): Promise<User> {
-    return this.userModel.findOne({ phoneNumber });
-  }
-  async findUserById(id: string): Promise<User> {
-    return this.userModel.findById(id).exec();
-  }
-
   async Login(loginDto: UserLoginDto) {
     const { email, password } = loginDto;
     try {
@@ -60,10 +51,18 @@ export class UserService {
       if (!isPasswordMatch) {
         throw new UnauthorizedException('invalid email or password');
       }
-      // const token = this.jwtService.sign
-      const payload = { id: user._id };
+      const payload: TokenDto = {
+        email: user.email,
+        name: user.name,
+        userId: user._id,
+      };
       const token = this.tokenService.generateToken(payload);
-      return { token };
+      console.log('t', token);
+      return {
+        Authorization: token,
+        email: user.email,
+        user: user._id,
+      };
     } catch (error) {
       console.log(error);
       throw new UnauthorizedException('An error occurred while logging in');
@@ -72,6 +71,16 @@ export class UserService {
 
   UserLoginGet() {
     return 'login successfully';
+  }
+
+  async FindUserByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email });
+  }
+  async FindUserByPhone(phoneNumber: string): Promise<User> {
+    return this.userModel.findOne({ phoneNumber });
+  }
+  async findUserById(id: string): Promise<User> {
+    return this.userModel.findById(id).exec();
   }
 
   async getAllUsers(page: number, pageSize: number) {
@@ -91,24 +100,3 @@ export class UserService {
     }
   }
 }
-
-// async Login(loginDto: UserLoginDto): Promise<string> {
-//   const { email, password } = loginDto;
-//   try {
-//     const user = await this.userModel.findOne({ email });
-//     if (!user) {
-//       throw new UnauthorizedException('invalid email');
-//     }
-//     const isPasswordMatch = await bcrypt.compare(password, user.password);
-//     if (!isPasswordMatch) {
-//       throw new UnauthorizedException('invalid email or password');
-//     }
-//     // const token = this.jwtService.sign
-//     const payload = { id: user._id };
-//     const token = this.jwtService.sign(payload);
-//     return token;
-//   } catch (error) {
-//     console.log(error);
-//     throw new UnauthorizedException('An error occurred while logging in');
-//   }
-// }
