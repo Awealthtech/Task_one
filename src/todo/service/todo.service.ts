@@ -23,7 +23,7 @@ export class TodoService {
   async findTodoById(todoId: string, userId: string) {
     const foundTodo = await this.todoModel.findOne({
       user: userId,
-      _id: todoId,
+      id: todoId,
     }); //.populate('user')
     return foundTodo;
   }

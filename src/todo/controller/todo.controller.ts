@@ -35,6 +35,7 @@ export class TodoController {
     request,
   ) {
     const user: TokenDto = request['user'];
+    console.log(user);
     const newTodo = this.todoService.create(createTodo, user.userId);
     return newTodo;
   }

@@ -8,7 +8,6 @@ import { TokenService } from 'src/utils/token/services/token.service';
 import { Request } from 'express';
 @Injectable()
 export class TodoGuards implements CanActivate {
-  extractTokenFromHeader: any;
   constructor(private tokenService: TokenService) {}
   async canActivate(context: ExecutionContext) {
     const request: Request = context.switchToHttp().getRequest();

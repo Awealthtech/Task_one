@@ -56,7 +56,7 @@ export class UserService {
         name: user.name,
         userId: user._id,
       };
-      const token = this.tokenService.generateToken(payload);
+      const token = await this.tokenService.generateToken(payload);
       console.log('t', token);
       return {
         Authorization: token,
